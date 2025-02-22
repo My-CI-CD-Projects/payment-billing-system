@@ -11,7 +11,8 @@ import java.text.DecimalFormat;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
+
 import net.authorize.api.contract.v1.ANetApiResponse;
 import net.authorize.api.contract.v1.ARBCreateSubscriptionResponse;
 import net.authorize.api.contract.v1.ARBGetSubscriptionResponse;
