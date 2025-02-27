@@ -39,11 +39,30 @@ jobs:
     runs-on: ubuntu-latest
     environment: DEV
     
+  docker:
+    name: Build & Push Docker Image
+    needs: build
+    runs-on: ubuntu-latest
+        
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: maven-build
           path: target/
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-java-app:latest .
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-java-app:latest
 
       
