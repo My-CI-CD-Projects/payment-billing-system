@@ -55,10 +55,10 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest .
+        run: docker build -t shalika199/my-github-java-app:latest .
 
       - name: Push Docker Image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest
+        run: docker push shalika199/my-github-java-app:latest
           
   deploy:
     name: Deploy to Server
@@ -73,6 +73,6 @@ jobs:
           name: maven-build
           path: target/
           script: |
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest
+            docker pull shalika199/my-github-java-app:latest
             docker stop my-github-java-app || true
             docker rm my-github-java-app || true
