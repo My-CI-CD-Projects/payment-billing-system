@@ -1,23 +1,49 @@
-name: My first GitHub Actions
+name: Java Maven CI/CD Pipeline
 
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Runs on push to main
+  pull_request:
+    branches:
+      - main  # Runs on PR to main
 
 jobs:
   build:
+    name: Build & Test
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17 for x64
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          architecture: x64
 
-  deployment:
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3  # Fetches the repository
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # Alternative: 'zulu', 'adopt', etc.
+          java-version: '17'
+          cache: 'maven'  # Caches Maven dependencies
+
+      - name: Build & Run Tests
+        run: mvn clean package  # Compiles, runs tests, and packages the app
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: maven-build
+          path: target/*.jar  # Uploads the generated JAR file
+
+  deploy:
+    name: Deploy to Server
+    needs: build  # Runs after the build job
     runs-on: ubuntu-latest
     environment: DEV
-    needs: build  # Ensures the deployment job runs after the build job
+    
     steps:
-      - name: Deploy
-        run: echo "Deploying to DEV environment..."  # Replace with actual deployment commands
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: maven-build
+          path: target/
+
+      
