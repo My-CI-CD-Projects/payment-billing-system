@@ -59,10 +59,10 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-java-app:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest .
 
       - name: Push Docker Image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-java-app:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest
 
       
