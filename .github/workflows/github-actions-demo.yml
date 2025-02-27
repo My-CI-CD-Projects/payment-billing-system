@@ -28,7 +28,7 @@ jobs:
         run: mvn clean package  # Compiles, runs tests, and packages the app
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: maven-build
           path: target/*.jar  # Uploads the generated JAR file
