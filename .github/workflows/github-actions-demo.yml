@@ -33,24 +33,21 @@ jobs:
           name: maven-build
           path: target/*.jar  # Uploads the generated JAR file
 
-  deploy:
-    name: Deploy to Server
-    needs: build  # Runs after the build job
-    runs-on: ubuntu-latest
-    environment: DEV
-    
   docker:
     name: Build & Push Docker Image
-    needs: build
+    needs: build  # Runs after build completes
     runs-on: ubuntu-latest
-        
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: maven-build
           path: target/
-          
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -65,4 +62,8 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-github-java-app:latest
 
-      
+  deploy:
+    name: Deploy to Server
+    needs: docker  # Runs after Docker image is built & pushed
+    runs-on: ubuntu-latest
+    environment: DEV
