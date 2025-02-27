@@ -61,9 +61,19 @@ jobs:
         run: docker push shalika199/my-github-java-app:latest
           
   deployment:
+    name: Deploy to DEV
+    needs: docker
     runs-on: ubuntu-latest
     environment: DEV
-    steps:
-      - name: deploy
 
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Pull and Run Docker Container
+        run: |
+          docker pull shalika199/my-github-java-app:latest
+          docker stop my-java-app || true
+          docker rm my-java-app || true
+          docker run -d --name my-java-app -p 8080:8080 shalika199/my-github-java-app:latest
           
