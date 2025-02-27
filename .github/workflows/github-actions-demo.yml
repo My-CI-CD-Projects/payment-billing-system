@@ -60,19 +60,10 @@ jobs:
       - name: Push Docker Image to Docker Hub
         run: docker push shalika199/my-github-java-app:latest
           
-  deploy:
-    name: Deploy to Server
-    needs: docker
+  deployment:
     runs-on: ubuntu-latest
     environment: DEV
-      
     steps:
-      - name: SSH into Server & Deploy
-        uses: appleboy/ssh-action@v0.1.7
-        with: 
-          name: maven-build
-          path: target/
-          script: |
-            docker pull shalika199/my-github-java-app:latest
-            docker stop my-github-java-app || true
-            docker rm my-github-java-app || true
+      - name: deploy
+
+          
